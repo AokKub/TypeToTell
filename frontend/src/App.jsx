@@ -6,6 +6,7 @@ import SignupPage from "./pages/SignUp";
 import { EditAccountPage } from "./pages/EditAccountPage";
 import { BookShelfPage } from "./pages/BookShelfPage";
 import NewBookPage from "./pages/NewBookPage";
+import StoryPage from "./pages/StoryPage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/create-book",
     element: <NewBookPage />,
+  },
+  {
+    path: "/story",
+    element: <StoryPage />,
   },
 ]);
 function App() {
