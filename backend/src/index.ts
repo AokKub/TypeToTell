@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { geminiTalk } from "./controllers/gemini";
+import { userRouter, userSecureRouter } from "./routes/user";
 
 const app = new Hono();
 
@@ -7,6 +7,7 @@ app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
-app.post("/talk", geminiTalk);
+app.route("/user/api", userRouter);
+app.route("/user/sucure/api", userSecureRouter);
 
 export default app;
