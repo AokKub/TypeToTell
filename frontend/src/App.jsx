@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./App.css";
-import HomeComponent from "./components/HomeComponent";
+import { HomePage } from "./pages/HomePage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomeComponent />,
+    element: <HomePage />,
   },
 ]);
 function App() {
