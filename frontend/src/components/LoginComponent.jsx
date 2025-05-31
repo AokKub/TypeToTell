@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import axiosInstance from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function LoginComponent() {
   const [email, setEmail] = useState("");
@@ -14,17 +15,11 @@ export default function LoginComponent() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Invalid email address";
-    }
+    if (!email) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email address";
 
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
+    if (!password) newErrors.password = "Password is required";
+    else if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -38,41 +33,35 @@ export default function LoginComponent() {
 
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post("/login", {
-        email,
-        password,
-      });
-
+      const response = await axiosInstance.post("/login", { email, password });
       const data = response.data;
+
       if (!data.userLogin?.status) {
         setLoginError(data.userLogin.msg || "Login failed");
-      } else if (data.userLogin?.status) {
+      } else {
         const { token, user } = data.userLogin;
         localStorage.setItem("token", token.token);
         localStorage.setItem("user", JSON.stringify(user));
         navigate("/");
-      } else {
-        setLoginError("Invalid login credentials");
       }
     } catch (error) {
-      setLoginError(
-        error.response?.data?.msg || "Failed to login. Please try again.",
-      );
+      setLoginError(error.response?.data?.msg || "Failed to login. Please try again.");
     }
     setIsLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
-
-
-      {/* Main Container */}
       <div className="w-full max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[600px] lg:min-h-[700px]">
           <div className="flex flex-col lg:flex-row">
-            {/* Left Side - Brand Section */}
-            <div className="lg:w-1/2 bg-gradient-to-br from-[#5C5E81] to-[#838FAF] relative flex items-center justify-center p-8 lg:p-12 min-h-[200px] lg:min-h-[700px]">
-              {/* Background Pattern */}
+            {/* Animated Brand Section */}
+            <motion.div
+              className="lg:w-1/2 bg-gradient-to-br from-[#5C5E81] to-[#838FAF] relative flex items-center justify-center p-8 lg:p-12 min-h-[200px] lg:min-h-[700px]"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-16 right-12 w-24 h-24 border-2 border-white rounded-full"></div>
                 <div className="absolute bottom-16 left-10 w-20 h-20 border-2 border-white rounded-lg rotate-12"></div>
@@ -80,14 +69,11 @@ export default function LoginComponent() {
                 <div className="absolute bottom-1/3 right-8 w-10 h-10 bg-white rounded-full"></div>
                 <div className="absolute top-2/3 left-16 w-6 h-6 bg-white rounded-full"></div>
               </div>
-
-              {/* Main Brand Text */}
               <div className="text-center lg:text-left relative z-10">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 leading-tight">
+                <h2 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
                   TypeToTale
-                  <br />
                 </h2>
-                <p className="text-purple-100 text-lg md:text-xl lg:text-2xl font-light max-w-md">
+                <p className="text-purple-100 text-lg lg:text-xl font-light max-w-md">
                   Continue your storytelling adventure
                 </p>
                 <div className="mt-8 flex justify-center lg:justify-start space-x-3">
@@ -96,40 +82,41 @@ export default function LoginComponent() {
                   <div className="w-2 h-1 bg-purple-300 rounded-full"></div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Right Side - Login Form */}
-            <div className="lg:w-1/2 p-6 md:p-8 lg:p-12 flex flex-col justify-center">
+            {/* Animated Form Section */}
+            <motion.div
+              className="lg:w-1/2 p-6 md:p-8 lg:p-12 flex flex-col justify-center"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               <div className="max-w-md mx-auto w-full">
-                {/* Header */}
                 <div className="text-center mb-10">
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#5C5E81] to-[#838FAF] rounded-full mb-4">
                     <Lock className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-bold text-[#5C5E81] mb-2">
-                    Sign In
-                  </h3>
-                  <p className="text-gray-600 text-sm md:text-base">
-                    Access your TypeToTale account
-                  </p>
+                  <h3 className="text-4xl font-bold text-[#5C5E81] mb-2">Sign In</h3>
+                  <p className="text-gray-600 text-base">Access your TypeToTale account</p>
                 </div>
 
-                {/* Error Message */}
+                {/* Animated Error Message */}
                 {loginError && (
-                  <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
-                    <p className="text-red-700 text-sm font-medium">
-                      {loginError}
-                    </p>
-                  </div>
+                  <motion.div
+                    className="mb-6 p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <p className="text-red-700 text-sm font-medium">{loginError}</p>
+                  </motion.div>
                 )}
 
                 {/* Form */}
                 <div className="space-y-6">
-                  {/* Email Field */}
+                  {/* Email */}
                   <div className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <input
@@ -138,9 +125,7 @@ export default function LoginComponent() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
-                          errors.email
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200 hover:border-gray-300 focus:border-[#838FAF]"
+                          errors.email ? "border-red-300 bg-red-50" : "border-gray-200"
                         }`}
                       />
                     </div>
@@ -152,11 +137,9 @@ export default function LoginComponent() {
                     )}
                   </div>
 
-                  {/* Password Field */}
+                  {/* Password */}
                   <div className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Password
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <input
@@ -165,15 +148,13 @@ export default function LoginComponent() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
-                          errors.password
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200 hover:border-gray-300 focus:border-[#838FAF]"
+                          errors.password ? "border-red-300 bg-red-50" : "border-gray-200"
                         }`}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                       >
                         {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
@@ -186,13 +167,14 @@ export default function LoginComponent() {
                     )}
                   </div>
 
-                
-
-                  {/* Submit Button */}
-                  <button
+                  {/* Animated Submit Button */}
+                  <motion.button
                     onClick={handleLogin}
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-[#5C5E81] to-[#838FAF] hover:from-[#5C5E81] hover:to-[#838FAF] text-white py-3 rounded-xl font-semibold text-sm transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
+                    className="w-full bg-gradient-to-r from-[#5C5E81] to-[#838FAF] text-white py-3 rounded-xl font-semibold text-sm shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center">
@@ -221,10 +203,10 @@ export default function LoginComponent() {
                     ) : (
                       "Sign In"
                     )}
-                  </button>
+                  </motion.button>
                 </div>
 
-                {/* Sign Up Link */}
+                {/* Footer */}
                 <div className="text-center mt-8">
                   <p className="text-gray-600 text-sm">
                     Don't have an account?{" "}
@@ -237,7 +219,7 @@ export default function LoginComponent() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

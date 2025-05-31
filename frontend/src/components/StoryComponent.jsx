@@ -32,7 +32,7 @@ export default function StoryTypingChallenge() {
 
     if (validParas.length !== invalidParas.length) {
       console.warn(
-        `Paragraph count mismatch: Valid(${validParas.length}) vs Invalid(${invalidParas.length})`,
+        `Paragraph count mismatch: Valid(${validParas.length}) vs Invalid(${invalidParas.length})`
       );
     }
 
@@ -56,7 +56,7 @@ export default function StoryTypingChallenge() {
 
         // Call your backend API
         const response = await axiosInstance.get(
-          `/secure/typing-session/${id}`,
+          `/secure/typing-session/${id}`
         );
         console.log("Typing session response:", response.data.book);
 
@@ -71,7 +71,7 @@ export default function StoryTypingChallenge() {
           // Validate and sync paragraph pairs
           const { valid, invalid } = validateParagraphPairs(
             validParas,
-            invalidParas,
+            invalidParas
           );
 
           setValidParagraphs(valid);
@@ -197,7 +197,7 @@ export default function StoryTypingChallenge() {
     return Math.round(
       ((currentIndex + (userInput.length > 0 ? 0.5 : 0)) /
         validParagraphs.length) *
-        100,
+        100
     );
   };
 
@@ -246,7 +246,7 @@ export default function StoryTypingChallenge() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Navigation Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-7 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => (window.location.href = "/bookshelf")}
@@ -270,12 +270,24 @@ export default function StoryTypingChallenge() {
               </span>
             </div>
 
+            {/* Profile */}
             <button
               onClick={() => (window.location.href = "/edit-account")}
-              className="group"
+              className="absolute top-6 right-6 z-10 group"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold hover:shadow-lg transition-all duration-200 group-hover:scale-105">
-                <span className="text-sm">👤</span>
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#5C5E81] cursor-pointer shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl">
+                <img
+                  src="/path-to-user-image.jpg" // Replace with actual image path or state
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                    e.target.parentElement.style.background =
+                      "linear-gradient(135deg, #5C5E81, #838FAF)";
+                    e.target.parentElement.innerHTML =
+                      '<div class="w-full h-full flex items-center justify-center text-white font-bold text-lg">U</div>';
+                  }}
+                />
               </div>
             </button>
           </div>
@@ -285,7 +297,7 @@ export default function StoryTypingChallenge() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Title Section */}
         <div className="text-center mb-10">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-[#5C5E81] via-[#838FAF] to-[#5C5E81] bg-clip-text text-transparent mb-3">
             TypeToTale
           </h1>
           <p className="text-slate-600 text-xl max-w-2xl mx-auto">
@@ -298,7 +310,7 @@ export default function StoryTypingChallenge() {
           <div className="bg-white rounded-full p-1 shadow-lg">
             <div className="bg-slate-100 rounded-full h-3 relative overflow-hidden">
               <div
-                className="bg-gradient-to-r from-indigo-500 to-purple-600 h-full rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-[#5C5E81] to-[#838FAF] h-full rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
@@ -313,10 +325,23 @@ export default function StoryTypingChallenge() {
 
         {/* Main Challenge Card */}
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-8 text-white">
+          <div className="bg-gradient-to-r from-[#5C5E81] to-[#838FAF]  p-8 text-white">
             <div className="flex items-center space-x-4 mb-4">
               <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
-                <span className="text-2xl">🔍</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"
+                  />
+                </svg>
               </div>
               <div>
                 <h2 className="text-2xl font-bold mb-1">
@@ -387,7 +412,9 @@ export default function StoryTypingChallenge() {
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-bold text-slate-800 flex items-center space-x-2">
                     <span
-                      className={`w-3 h-3 rounded-full ${showSuccess ? "bg-green-500" : "bg-blue-500"}`}
+                      className={`w-3 h-3 rounded-full ${
+                        showSuccess ? "bg-green-500" : "bg-blue-500"
+                      }`}
                     ></span>
                     <span>Your Corrected Version</span>
                   </h3>
@@ -408,8 +435,8 @@ export default function StoryTypingChallenge() {
                       showSuccess
                         ? "from-green-50 to-green-100 border-green-400 shadow-green-200 shadow-lg"
                         : matchPercentage >= 80
-                          ? "from-blue-50 to-blue-100 border-blue-400 shadow-blue-200 shadow-lg"
-                          : "from-slate-50 to-slate-100 border-slate-300 focus:border-indigo-400 focus:shadow-indigo-200 focus:shadow-lg hover:border-slate-400"
+                        ? "from-blue-50 to-blue-100 border-blue-400 shadow-blue-200 shadow-lg"
+                        : "from-slate-50 to-slate-100 border-slate-300 focus:border-[#5C5E81] focus:shadow-indigo-200 focus:shadow-lg hover:border-slate-400"
                     }`}
                     disabled={isCompleted}
                   />
@@ -422,8 +449,8 @@ export default function StoryTypingChallenge() {
                           matchPercentage >= 90
                             ? "bg-green-500"
                             : matchPercentage >= 70
-                              ? "bg-yellow-500"
-                              : "bg-red-500"
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
                         }`}
                       ></div>
                       <span className="text-sm font-medium text-slate-600">
