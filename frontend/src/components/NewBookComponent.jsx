@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axiosInstance from "../api/axiosInstance";
+import { useNavigate } from "react-router-dom"; // 🧭 import useNavigate
 export default function NewBookComponent() {
   const [storyInput, setStoryInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const handleStartStory = async () => {
     if (!storyInput.trim()) return;
 
@@ -33,6 +34,7 @@ export default function NewBookComponent() {
 
   const handleBreadcrumbClick = () => {
     // Replace with your navigation logic (e.g., router.push('/bookshelf'))
+    navigate("/bookshelf");
     console.log("Navigate to bookshelf");
   };
 

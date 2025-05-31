@@ -122,7 +122,7 @@ const editUser = async (
         data: {
           username,
           email,
-          user_image: image_url,
+          user_image: image_url.secure_url, // Assuming uploadToCloudinary returns an object with secure_url
         },
       });
       return {
@@ -139,4 +139,92 @@ const editUser = async (
   }
 };
 
-export { signUp, isLogin, createTypingSession, editUser };
+const getTypingSessionByUserId = async (userId: number) => {
+  try {
+    const books = await db.typingSession.findMany({
+      where: { userId },
+    });
+    return { status: true, books };
+  } catch (error) {
+    console.error("Failed to fetch books by user ID:", error);
+    throw new Error("Could not fetch books");
+  }
+};
+
+const getTypingSessionById = async (sessionId: number) => {
+  try {
+    const session = await db.typingSession.findUnique({
+      where: { id: sessionId },
+    });
+    if (!session) {
+      return { status: false, msg: "Session not found" };
+    }
+    return { status: true, session };
+  } catch (error) {
+    console.error("Failed to fetch typing session by ID:", error);
+    throw new Error("Could not fetch typing session");
+  }
+};
+
+const updateTypingSessionById = async (
+  id: number,
+  data: { status?: boolean },
+) => {
+  try {
+    const updatedSession = await db.typingSession.update({
+      where: { id },
+      data: {
+        status: data.status,
+        updatedAt: new Date(),
+      },
+    });
+    return updatedSession;
+  } catch (error) {
+    console.error("Error updating typing session:", error);
+    return null;
+  }
+};
+
+const getCompleteStory = async (id: number) => {
+  try {
+    const session = await db.typingSession.findUnique({
+      where: { id, status: true },
+      select: {
+        validStory: true,
+        invalidStory: true,
+        createdAt: true,
+      },
+    });
+    if (!session) {
+      return { status: false, msg: "Session not found" };
+    }
+    return { status: true, session };
+  } catch (error) {
+    console.error("Failed to fetch complete story:", error);
+    throw new Error("Could not fetch complete story");
+  }
+};
+
+const deleteTypingSession = async (id: number) => {
+  try {
+    const deletedSession = await db.typingSession.delete({
+      where: { id },
+    });
+    return { status: true, deletedSession };
+  } catch (error) {
+    console.error("Failed to delete typing session:", error);
+    return { status: false, msg: "Could not delete typing session" };
+  }
+};
+
+export {
+  signUp,
+  isLogin,
+  createTypingSession,
+  editUser,
+  getTypingSessionByUserId,
+  getTypingSessionById,
+  updateTypingSessionById,
+  getCompleteStory,
+  deleteTypingSession,
+};

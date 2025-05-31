@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import axiosInstance from "../api/axiosInstance";
+import { useNavigate } from "react-router-dom"; // 🧭 import useNavigate
 export default function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -8,7 +9,7 @@ export default function LoginComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate(); // 🧭 useNavigate hook for navigation
   const validateForm = () => {
     const newErrors = {};
     if (!email) {
@@ -42,15 +43,17 @@ export default function LoginComponent() {
 
       const data = response.data;
       console.log("Login response:", data.userLogin?.status);
-
+      console.log(response.data);
       if (!data.userLogin?.status) {
-        setLoginError(data.msg || "Login failed");
+        setLoginError(data.userLogin.msg || "Login failed");
       } else if (data.userLogin?.status) {
         const { token, user } = data.userLogin;
         // Note: localStorage not used in demo - would store in real app
+        localStorage.setItem("token", token.token);
+        localStorage.setItem("user", JSON.stringify(user));
         console.log("Token:", token.token);
         console.log("User:", user);
-        window.reload.location.href = "/";
+        navigate("/");
       } else {
         setLoginError("Invalid login credentials");
       }

@@ -1,7 +1,14 @@
 import type { Context } from "hono";
 import type { signupRequest } from "../types/user";
-import { signUp, isLogin } from "../models/user";
-import { editUser } from "../models/user";
+import {
+  signUp,
+  isLogin,
+  editUser,
+  getTypingSessionByUserId,
+  getTypingSessionById,
+  updateTypingSessionById,
+  deleteTypingSession,
+} from "../models/user";
 const signup = async (c: Context) => {
   try {
     const { username, email, password }: signupRequest =
@@ -51,6 +58,7 @@ const editUserProfile = async (c: Context) => {
 
     const editedUser = await editUser(Number(userId), username, email, image);
 
+    console.log(editedUser);
     if (!editedUser.status) {
       return c.json({ error: "Failed to edit user profile" }, 500);
     }
@@ -66,4 +74,93 @@ const editUserProfile = async (c: Context) => {
   }
 };
 
-export { signup, login, editUserProfile };
+const getUserTypingSession = async (c: Context) => {
+  try {
+    const userId = c.req.param("userId");
+    if (!userId) {
+      return c.json({ error: "User ID is required" }, 400);
+    }
+
+    const books = await getTypingSessionByUserId(Number(userId));
+    if (!books.status) {
+      return c.json({ error: "Failed to fetch typing sessions" }, 500);
+    }
+
+    return c.json({ status: true, books: books.books });
+  } catch (error) {
+    console.error("Error fetching typing sessions:", error);
+    return c.json({ error: "An unexpected error occurred" }, 500);
+  }
+};
+
+const getTypingSession = async (c: Context) => {
+  try {
+    const id = c.req.param("id");
+    if (!id) {
+      return c.json({ error: "User ID is required" }, 400);
+    }
+
+    const book = await getTypingSessionById(Number(id));
+    if (!book.status) {
+      return c.json({ error: "Failed to fetch typing sessions" }, 500);
+    }
+
+    return c.json({ status: true, book });
+  } catch (error) {
+    console.error("Error fetching typing sessions:", error);
+    return c.json({ error: "An unexpected error occurred" }, 500);
+  }
+};
+
+const updateTypingSession = async (c: Context) => {
+  try {
+    const id = c.req.param("id");
+    const { status } = await c.req.json();
+
+    if (!id) {
+      return c.json({ error: "Session ID is required" }, 400);
+    }
+
+    // Update the typing session status in your database
+    const updatedSession = await updateTypingSessionById(Number(id), {
+      status,
+    });
+
+    if (!updatedSession) {
+      return c.json({ error: "Failed to update typing session" }, 500);
+    }
+
+    return c.json({
+      status: true,
+      message: "Session updated successfully",
+      session: updatedSession,
+    });
+  } catch (error) {
+    console.error("Error updating typing session:", error);
+    return c.json({ error: "An unexpected error occurred" }, 500);
+  }
+};
+
+const deleteTyping = async (c: Context) => {
+  try {
+    const id = c.req.param("id");
+    if (!id) {
+      return c.json({ error: "Session ID is required" }, 400);
+    }
+    const deletedSession = await deleteTypingSession(Number(id));
+
+    return c.json({ status: true, deletedSession });
+  } catch (error) {
+    console.error("Error deleting typing session:", error);
+    return c.json({ error: "An unexpected error occurred" }, 500);
+  }
+};
+export {
+  signup,
+  login,
+  editUserProfile,
+  getUserTypingSession,
+  getTypingSession,
+  updateTypingSession,
+  deleteTyping,
+};
