@@ -20,6 +20,7 @@ export default function NewBookComponent() {
         },
       );
       console.log("Story created:", response.data);
+      navigate("/bookshelf");
     } catch (error) {
       console.error("Error creating story:", error);
     } finally {
