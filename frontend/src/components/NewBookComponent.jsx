@@ -34,7 +34,7 @@ export default function NewBookComponent() {
         <div className="items-center text-lg mt-14 font-bold md:mt-18 ml-10 mb-5 hidden md:flex">
           <span className="text-[23px] text-[#8C8DA3]">Bookshelf</span>
           <span className="mx-2 text-[#8C8DA3]">{">"}</span>
-          <span className="text-[23px] text-[#5C5E81]">create a story</span>
+          <span className="text-[23px] text-[#5C5E81]">Create a story</span>
         </div>
 
         {/* Centered Story Box */}
