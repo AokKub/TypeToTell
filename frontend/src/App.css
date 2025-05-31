@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+:root {
+  --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
 body {
+  font-family: var(--font-poppins);
   background-color: #ffffff;
+}
+
+* {
+  font-family: var(--font-poppins);
 }
