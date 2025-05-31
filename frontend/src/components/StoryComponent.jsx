@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../api/axiosInstance"; // Update path as needed
-
+import { useParams, useNavigate } from "react-router-dom"; // Adjust the import based on your routing library
+import axiosInstance from "../api/axiosInstance"; // Adjust the import based on your project structure
 export default function StoryTypingChallenge() {
   const [userInput, setUserInput] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,9 +11,36 @@ export default function StoryTypingChallenge() {
   const [invalidParagraphs, setInvalidParagraphs] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const { id } = useParams(); // Assuming you're using react-router for routing
+  const navigate = useNavigate(); // Import useNavigate from react-router-dom if needed
+  // Enhanced paragraph parsing function
+  const parseStoryParagraphs = (storyText) => {
+    if (!storyText) return [];
 
-  const navigate = useNavigate();
-  const { id } = useParams();
+    // Split by multiple possible delimiters and clean up
+    const paragraphs = storyText
+      .split(/\||\n\n|\r\n\r\n/) // Split by |, double newlines, or double CRLF
+      .map((paragraph) => paragraph.trim()) // Remove leading/trailing whitespace
+      .filter((paragraph) => paragraph.length > 0); // Remove empty paragraphs
+
+    return paragraphs;
+  };
+
+  // Validate paragraph pairs
+  const validateParagraphPairs = (validParas, invalidParas) => {
+    const minLength = Math.min(validParas.length, invalidParas.length);
+
+    if (validParas.length !== invalidParas.length) {
+      console.warn(
+        `Paragraph count mismatch: Valid(${validParas.length}) vs Invalid(${invalidParas.length})`,
+      );
+    }
+
+    return {
+      valid: validParas.slice(0, minLength),
+      invalid: invalidParas.slice(0, minLength),
+    };
+  };
 
   // Fetch typing session data from your backend
   useEffect(() => {
@@ -33,19 +59,28 @@ export default function StoryTypingChallenge() {
           `/secure/typing-session/${id}`,
         );
         console.log("Typing session response:", response.data.book);
+
         if (response.data.status && response.data.book) {
           const session = response.data.book.session;
           setTypingSession(session);
-          // Split stories into paragraphs using | as delimiter
-          // You can modify this based on how you store the paragraphs
-          const validParas = session.validStory.split("|").map((p) => p.trim());
-          const invalidParas = session.invalidStory
-            .split("|")
-            .map((p) => p.trim());
 
-          setValidParagraphs(validParas);
-          setInvalidParagraphs(invalidParas);
+          // Enhanced paragraph parsing
+          const validParas = parseStoryParagraphs(session.validStory);
+          const invalidParas = parseStoryParagraphs(session.invalidStory);
+
+          // Validate and sync paragraph pairs
+          const { valid, invalid } = validateParagraphPairs(
+            validParas,
+            invalidParas,
+          );
+
+          setValidParagraphs(valid);
+          setInvalidParagraphs(invalid);
           setIsCompleted(session.status);
+
+          console.log(`Loaded ${valid.length} paragraph pairs`);
+          console.log("Valid paragraphs:", valid);
+          console.log("Invalid paragraphs:", invalid);
         } else {
           setError("Failed to load typing session");
         }
@@ -71,13 +106,16 @@ export default function StoryTypingChallenge() {
       setIsCompleted(true);
       setShowSuccess(true);
       setTimeout(() => {
-        navigate(`/complete-story/${id}`);
+        // navigate(`/complete-story/${id}`);
+        navigate("/bookshelf");
       }, 2000);
     } catch (err) {
       console.error("Error completing session:", err);
       // Continue anyway - the user completed the challenge
+      setIsCompleted(true);
+      setShowSuccess(true);
       setTimeout(() => {
-        navigate("/complete-story");
+        console.log("Navigating to complete story page (fallback)");
       }, 2000);
     }
   };
@@ -88,7 +126,13 @@ export default function StoryTypingChallenge() {
 
     const currentValidParagraph = validParagraphs[currentIndex];
 
-    if (value.trim() === currentValidParagraph?.trim()) {
+    // Normalize text for comparison (trim whitespace and normalize line endings)
+    const normalizedInput = value.trim().replace(/\r\n/g, "\n");
+    const normalizedTarget = currentValidParagraph
+      ?.trim()
+      .replace(/\r\n/g, "\n");
+
+    if (normalizedInput === normalizedTarget) {
       if (currentIndex < validParagraphs.length - 1) {
         setShowSuccess(true);
         setTimeout(() => {
@@ -104,30 +148,39 @@ export default function StoryTypingChallenge() {
     }
   };
 
+  // Enhanced error counting with word-level analysis
   const getErrorCount = () => {
     const currentInvalidParagraph = invalidParagraphs[currentIndex];
     const currentValidParagraph = validParagraphs[currentIndex];
 
     if (!currentInvalidParagraph || !currentValidParagraph) return 0;
 
-    const invalidWords = currentInvalidParagraph.split(" ");
-    const validWords = currentValidParagraph.split(" ");
+    // Split into words and compare
+    const invalidWords = currentInvalidParagraph.toLowerCase().split(/\s+/);
+    const validWords = currentValidParagraph.toLowerCase().split(/\s+/);
     let errorCount = 0;
 
-    for (let i = 0; i < Math.max(invalidWords.length, validWords.length); i++) {
-      if (invalidWords[i] !== validWords[i]) {
+    // Count word differences
+    const maxLength = Math.max(invalidWords.length, validWords.length);
+    for (let i = 0; i < maxLength; i++) {
+      const invalidWord = invalidWords[i] || "";
+      const validWord = validWords[i] || "";
+
+      if (invalidWord !== validWord) {
         errorCount++;
       }
     }
+
     return errorCount;
   };
 
+  // Enhanced match percentage calculation
   const getMatchPercentage = () => {
     const currentValidParagraph = validParagraphs[currentIndex];
     if (!userInput.trim() || !currentValidParagraph) return 0;
 
-    const inputWords = userInput.trim().split(" ");
-    const validWords = currentValidParagraph.split(" ");
+    const inputWords = userInput.trim().toLowerCase().split(/\s+/);
+    const validWords = currentValidParagraph.toLowerCase().split(/\s+/);
     let matches = 0;
 
     const minLength = Math.min(inputWords.length, validWords.length);
@@ -138,13 +191,23 @@ export default function StoryTypingChallenge() {
     return Math.round((matches / validWords.length) * 100);
   };
 
+  // Progress calculation
+  const getProgress = () => {
+    if (validParagraphs.length === 0) return 0;
+    return Math.round(
+      ((currentIndex + (userInput.length > 0 ? 0.5 : 0)) /
+        validParagraphs.length) *
+        100,
+    );
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
           <div className="text-slate-600 text-lg font-medium">
-            Loading your challenge...
+            Loading your story challenge...
           </div>
         </div>
       </div>
@@ -159,25 +222,25 @@ export default function StoryTypingChallenge() {
             <span className="text-slate-400 text-2xl">📚</span>
           </div>
           <div className="text-slate-700 text-lg font-semibold mb-2">
-            No Challenge Found
+            Challenge Not Found
           </div>
-          <div className="text-slate-500 mb-6">
-            We couldn't find the typing session you're looking for.
-          </div>
-          <Link
-            to="/bookshelf"
+          <div className="text-slate-500 mb-6">{error}</div>
+          <button
+            onClick={() => (window.location.href = "/bookshelf")}
             className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors duration-200 font-medium"
           >
             Browse Challenges
-          </Link>
+          </button>
         </div>
       </div>
     );
   }
 
   const currentInvalidParagraph = invalidParagraphs[currentIndex];
+  const currentValidParagraph = validParagraphs[currentIndex];
   const errorCount = getErrorCount();
   const matchPercentage = getMatchPercentage();
+  const progress = getProgress();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -185,24 +248,37 @@ export default function StoryTypingChallenge() {
       <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link
-              to="/bookshelf"
+            <button
+              onClick={() => (window.location.href = "/bookshelf")}
               className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors"
             >
               <span className="text-xl">←</span>
               <span className="font-medium">Back to Bookshelf</span>
-            </Link>
+            </button>
             <div className="text-slate-300">|</div>
             <div className="text-slate-700 font-semibold">
               {typingSession?.theme}
             </div>
           </div>
 
-          <Link to="/edit-account" className="group">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold hover:shadow-lg transition-all duration-200 group-hover:scale-105">
-              <span className="text-sm">👤</span>
+          <div className="flex items-center space-x-4">
+            {/* Progress indicator */}
+            <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2">
+              <span className="text-sm text-slate-600">Progress:</span>
+              <span className="text-sm font-bold text-indigo-600">
+                {progress}%
+              </span>
             </div>
-          </Link>
+
+            <button
+              onClick={() => (window.location.href = "/edit-account")}
+              className="group"
+            >
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold hover:shadow-lg transition-all duration-200 group-hover:scale-105">
+                <span className="text-sm">👤</span>
+              </div>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -217,6 +293,24 @@ export default function StoryTypingChallenge() {
           </p>
         </div>
 
+        {/* Progress Bar */}
+        <div className="mb-8">
+          <div className="bg-white rounded-full p-1 shadow-lg">
+            <div className="bg-slate-100 rounded-full h-3 relative overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-indigo-500 to-purple-600 h-full rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-sm text-slate-600">
+            <span>
+              Paragraph {currentIndex + 1} of {validParagraphs.length}
+            </span>
+            <span>{progress}% Complete</span>
+          </div>
+        </div>
+
         {/* Main Challenge Card */}
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-8 text-white">
@@ -229,13 +323,13 @@ export default function StoryTypingChallenge() {
                   Spot & Fix the Errors
                 </h2>
                 <p className="text-indigo-100 text-lg">
-                  Find and correct the mistakes in this paragraph
+                  Find and correct the mistakes in paragraph {currentIndex + 1}
                 </p>
               </div>
             </div>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-4 gap-6 mt-8">
               <div className="text-center">
                 <div className="text-3xl font-bold text-white">
                   {errorCount}
@@ -253,6 +347,12 @@ export default function StoryTypingChallenge() {
                   {userInput.length}
                 </div>
                 <div className="text-indigo-200 text-sm">Characters</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">
+                  {currentIndex + 1}/{validParagraphs.length}
+                </div>
+                <div className="text-indigo-200 text-sm">Paragraph</div>
               </div>
             </div>
           </div>
@@ -304,12 +404,13 @@ export default function StoryTypingChallenge() {
                     value={userInput}
                     onChange={handleChange}
                     placeholder="Type the corrected paragraph here..."
-                    className={`w-full h-[300px] p-8 text-lg text-slate-800 bg-gradient-to-br border-2 rounded-2xl focus:outline-none resize-none transition-all duration-300 font-medium leading-relaxed ${showSuccess
+                    className={`w-full h-[300px] p-8 text-lg text-slate-800 bg-gradient-to-br border-2 rounded-2xl focus:outline-none resize-none transition-all duration-300 font-medium leading-relaxed ${
+                      showSuccess
                         ? "from-green-50 to-green-100 border-green-400 shadow-green-200 shadow-lg"
                         : matchPercentage >= 80
                           ? "from-blue-50 to-blue-100 border-blue-400 shadow-blue-200 shadow-lg"
                           : "from-slate-50 to-slate-100 border-slate-300 focus:border-indigo-400 focus:shadow-indigo-200 focus:shadow-lg hover:border-slate-400"
-                      }`}
+                    }`}
                     disabled={isCompleted}
                   />
 
@@ -317,12 +418,13 @@ export default function StoryTypingChallenge() {
                   <div className="absolute bottom-4 right-4 flex items-center space-x-3">
                     <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1">
                       <div
-                        className={`w-3 h-3 rounded-full animate-pulse ${matchPercentage >= 90
+                        className={`w-3 h-3 rounded-full animate-pulse ${
+                          matchPercentage >= 90
                             ? "bg-green-500"
                             : matchPercentage >= 70
                               ? "bg-yellow-500"
                               : "bg-red-500"
-                          }`}
+                        }`}
                       ></div>
                       <span className="text-sm font-medium text-slate-600">
                         {userInput.length} chars
@@ -350,10 +452,11 @@ export default function StoryTypingChallenge() {
                 </div>
                 <div>
                   <div className="text-green-800 font-bold text-xl">
-                    Challenge Completed!
+                    Story Challenge Completed!
                   </div>
                   <div className="text-green-600 text-lg">
-                    Redirecting to your story...
+                    You've successfully corrected all {validParagraphs.length}{" "}
+                    paragraphs! Redirecting to your story...
                   </div>
                 </div>
               </div>
