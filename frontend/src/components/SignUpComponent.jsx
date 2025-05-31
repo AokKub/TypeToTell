@@ -62,7 +62,7 @@ export default function SignUpComponent() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#8AA0BD] relative">
-      <div className="absolute top-4 left-4 text-white font-bold text-[18px]">
+      <div className="absolute top-4 left-4 text-white font-bold text-[35px]">
         TypeToTale
       </div>
 

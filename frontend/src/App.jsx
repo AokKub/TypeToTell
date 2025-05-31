@@ -7,6 +7,7 @@ import { EditAccountPage } from "./pages/EditAccountPage";
 import { BookShelfPage } from "./pages/BookShelfPage";
 import NewBookPage from "./pages/NewBookPage";
 import CompleteStoryPage from "./pages/CompleteStoryPage";
+import StoryPage from "./pages/StoryPage";
 
 const router = createBrowserRouter([
   {
@@ -39,9 +40,10 @@ const router = createBrowserRouter([
     path: "/complete-story",
     element: <CompleteStoryPage />,
   },
- 
-
-
+  {
+    path: "/story",
+    element: <StoryPage />,
+  },
 
 ]);
 function App() {

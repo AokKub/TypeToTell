@@ -70,9 +70,11 @@ export default function NewBookComponent() {
 
             {/* START Button */}
             <div className="flex justify-center mt-6">
+              <Link to='/story'>
               <button className="bg-[#5C5E81] text-white px-6 py-2 rounded-full font-semibold tracking-wide hover:scale-105 transition-transform duration-200">
                 START
               </button>
+              </Link>
             </div>
           </div>
         </div>
