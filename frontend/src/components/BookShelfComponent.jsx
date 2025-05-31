@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { z } from 'zod';
+
+const bookNameSchema = z.string().max(10, "Book name must be 10 characters or fewer.");
 
 export default function BookShelfComponent() {
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
@@ -27,14 +30,20 @@ export default function BookShelfComponent() {
     setRenameInput('');
   }
 
-  // rename
   function handleRename() {
-    if (renameInput.trim() === '') return; // without space
+    const result = bookNameSchema.safeParse(renameInput.trim());
+
+    if (!result.success) {
+      alert(result.error.errors[0].message);
+      return;
+    }
+
     setBookNames((prev) => {
       const newBooks = [...prev];
-      newBooks[selectedBookIndex] = renameInput.trim();
+      newBooks[selectedBookIndex] = result.data;
       return newBooks;
     });
+
     closeRenameModal();
   }
 
@@ -43,11 +52,7 @@ export default function BookShelfComponent() {
       {/* profile */}
       <Link to="/edit-account" className="absolute top-6 right-6">
         <div className="w-12 h-12 rounded-full overflow-hidden border-1 border-[#5C5E81] cursor-pointer">
-          <img
-            src="/" 
-            alt="Profile"
-            className="w-full h-full object-cover"
-          />
+          <img src="/" alt="Profile" className="w-full h-full object-cover" />
         </div>
       </Link>
 
@@ -125,28 +130,15 @@ export default function BookShelfComponent() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 ml-10 mr-10 mt-10">
           {bookNames.map((name, index) => (
             <div key={index} className="flex flex-col items-center">
-
               <Link
                 to={'/complete-story'}
                 className="relative w-[150px] h-[200px] rounded-[10px] group cursor-pointer block"
               >
-                {/* Shadow */}
                 <div className="absolute top-2 left-2 w-full h-full bg-[#BFBFBF] rounded-md opacity-100 z-0"></div>
-
-                {/* Spine */}
-                <div
-                  className="absolute left-0 top-0 w-[15px] h-full bg-[#494141] rounded-l-md z-10
-                  group-hover:scale-[1.02] group-hover:origin-left transition-transform duration-200"
-                ></div>
-
-                {/* Cover */}
-                <div
-                  className="absolute left-[15px] top-0 right-0 h-full bg-[#5C5E81] rounded-r-md z-15
-                  group-hover:scale-[1.02] group-hover:origin-left transition-transform duration-200"
-                ></div>
+                <div className="absolute left-0 top-0 w-[15px] h-full bg-[#494141] rounded-l-md z-10 group-hover:scale-[1.02] group-hover:origin-left transition-transform duration-200"></div>
+                <div className="absolute left-[15px] top-0 right-0 h-full bg-[#5C5E81] rounded-r-md z-15 group-hover:scale-[1.02] group-hover:origin-left transition-transform duration-200"></div>
               </Link>
 
-              {/* Book name */}
               <div
                 onClick={() => openRenameModal(index)}
                 className="block mt-4 max-w-[100px] cursor-pointer text-[#9D9191] text-[15px] font-medium text-center select-none"
@@ -159,12 +151,11 @@ export default function BookShelfComponent() {
         </div>
       </div>
 
-      {/* Rename Modal (ไม่มี background overlay) */}
+      {/* Rename Modal */}
       {isRenameModalOpen && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
           <div className="bg-white shadow-lg rounded-2xl p-6 w-[400px] border border-gray-300">
             <h2 className="text-xl font-bold text-[#5C5E81] mb-4 text-center">Rename Book</h2>
-
             <div className="flex items-center space-x-2">
               <input
                 type="text"
@@ -185,7 +176,6 @@ export default function BookShelfComponent() {
                 Rename
               </button>
             </div>
-
             <div className="flex justify-center mt-4">
               <button
                 className="text-[15px] px-4 py-2 text-[#D37070] underline"
