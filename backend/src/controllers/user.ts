@@ -9,9 +9,9 @@ const signup = async (c: Context) => {
 
     console.log("User signup attempt:", { username, email, password });
 
-    const userSingedUp = await signUp(username, email, password);
+    await signUp(username, email, password);
     // For this example, we will just return a success message
-    return c.json({ message: "User signed up successfully" });
+    return c.json({ status: true, message: "User signed up successfully" });
   } catch (error) {
     console.error("Error during signup:", error);
     return c.json({ error: "Failed to sign up user" }, 500);
@@ -56,8 +56,9 @@ const editUserProfile = async (c: Context) => {
     }
 
     return c.json({
+      status: true,
       message: "User profile updated successfully",
-      user: editedUser.updatedUser,
+      user: editedUser,
     });
   } catch (error) {
     console.error("Error editing user profile:", error);

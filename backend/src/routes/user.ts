@@ -12,7 +12,7 @@ userSecureRouter.post("/generate-story", geminiCreateStory);
 userSecureRouter.post("edit-profile/:id", editUserProfile);
 
 userRouter.get("/token-validation", tokenValidation);
-userRouter.post("/sign-up", signup);
+userRouter.post("/signup", signup);
 userRouter.post("/login", login);
 userRouter.get("/", (c) => {
   return c.text("User route is working!");
