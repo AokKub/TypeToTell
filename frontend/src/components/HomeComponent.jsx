@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function TypeToTaleCover() {
+export default function HomePageComponent() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -50,8 +50,9 @@ export default function TypeToTaleCover() {
         >
           {/* Book container with 3D perspective */}
           <div
-            className={`relative w-[280px] h-[350px] sm:w-[360px] sm:h-[450px] md:w-[440px] md:h-[520px] lg:w-[520px] lg:h-[600px] transform transition-all duration-1000 ${isFlipped ? "rotate-y-180" : "-rotate-1 sm:-rotate-2 lg:-rotate-3"
-              } shadow-xl sm:shadow-2xl hover:shadow-3xl`}
+            className={`relative w-[280px] h-[350px] sm:w-[360px] sm:h-[450px] md:w-[440px] md:h-[520px] lg:w-[520px] lg:h-[600px] transform transition-all duration-1000 ${
+              isFlipped ? "rotate-y-180" : "-rotate-1 sm:-rotate-2 lg:-rotate-3"
+            } shadow-xl sm:shadow-2xl hover:shadow-3xl`}
             style={{
               transformStyle: "preserve-3d",
               filter:

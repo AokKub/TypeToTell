@@ -34,13 +34,6 @@ const router = createBrowserRouter([
     path: "/create-book",
     element: <NewBookPage />,
   },
-  {
-    path: "/Story",
-    element: <S />,
-  },
-
-
-
 ]);
 function App() {
   return <RouterProvider router={router} />;

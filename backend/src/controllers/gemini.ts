@@ -1,10 +1,12 @@
 import type { Context } from "hono";
 import { geminiCreateStoryRequest } from "../types/gemini";
 import { geminiAI, geminiMakeInvalidStory } from "../services/gemini";
+import { createTypingSession } from "../models/user";
 
 const geminiCreateStory = async (c: Context) => {
-  const { prompt } = await c.req.json<geminiCreateStoryRequest>();
-  const validStory = await geminiAI(prompt);
+  const userId = c.req.param("userId");
+  const { theme } = await c.req.json<geminiCreateStoryRequest>();
+  const validStory = await geminiAI(theme);
   if (!validStory) {
     return c.json(
       {
@@ -24,8 +26,11 @@ const geminiCreateStory = async (c: Context) => {
     );
   }
 
+  await createTypingSession(theme, Number(userId), validStory, invalidStory);
+
   return c.json({
     message: "Story generated successfully",
+    theme,
     validStory,
     invalidStory,
   });

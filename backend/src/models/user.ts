@@ -78,6 +78,7 @@ const createTypingSession = async (
   invalidStory: string,
 ) => {
   try {
+    console.log(theme, userId, validStory, invalidStory);
     const session = await db.typingSession.create({
       data: {
         theme,

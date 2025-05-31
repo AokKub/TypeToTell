@@ -10,6 +10,6 @@ app.get("/", (c) => {
 });
 
 app.route("/user/api", userRouter);
-app.route("/user/sucure/api", userSecureRouter);
-app.route("typing/seure/api", typingSessionRouter);
+app.route("/user/api/secure", userSecureRouter);
+app.route("typing/api/secure", typingSessionRouter);
 export default app;

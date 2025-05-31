@@ -1,5 +1,5 @@
 type geminiCreateStoryRequest = {
-  prompt: string;
+  theme: string;
 };
 
 export type { geminiCreateStoryRequest };

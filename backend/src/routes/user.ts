@@ -8,7 +8,7 @@ const userRouter = new Hono();
 const userSecureRouter = new Hono();
 
 userSecureRouter.use(authMiddleware);
-userSecureRouter.post("/generate-story", geminiCreateStory);
+userSecureRouter.post("/generate-story/:userId", geminiCreateStory);
 userSecureRouter.post("edit-profile/:id", editUserProfile);
 
 userRouter.get("/token-validation", tokenValidation);
