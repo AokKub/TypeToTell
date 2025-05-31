@@ -5,6 +5,8 @@ import LoginPage from "./components/LoginComponent";
 import SignupPage from "./pages/SignUp";
 import { EditAccountPage } from "./pages/EditAccountPage";
 import { BookShelfPage } from "./pages/BookShelfPage";
+import NewBookPage from "./pages/NewBookPage";
+import CompleteStoryPage from "./pages/CompleteStoryPage";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,15 @@ const router = createBrowserRouter([
     path: "/bookshelf",
     element: <BookShelfPage />,
   },
+  {
+    path: "/create-book",
+    element: <NewBookPage />,
+  },
+  {
+    path: "/complete-story",
+    element: <CompleteStoryPage />,
+  },
+ 
 
 
 

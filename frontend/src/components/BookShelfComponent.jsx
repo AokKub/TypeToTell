@@ -15,23 +15,21 @@ export default function BookShelfComponent() {
     "Name",
   ]);
 
-  // เปิด modal พร้อมตั้งค่า input
   function openRenameModal(index) {
     setSelectedBookIndex(index);
     setRenameInput(bookNames[index]);
     setIsRenameModalOpen(true);
   }
 
-  // ปิด modal
   function closeRenameModal() {
     setIsRenameModalOpen(false);
     setSelectedBookIndex(null);
     setRenameInput('');
   }
 
-  // เปลี่ยนชื่อหนังสือ
+  // rename
   function handleRename() {
-    if (renameInput.trim() === '') return; // ไม่ให้ตั้งชื่อว่าง
+    if (renameInput.trim() === '') return; // without space
     setBookNames((prev) => {
       const newBooks = [...prev];
       newBooks[selectedBookIndex] = renameInput.trim();
@@ -69,7 +67,9 @@ export default function BookShelfComponent() {
 
         {/* Breadcrumb */}
         <div className="items-center text-lg mt-10 md:mt-18 text-[#5C5E81] ml-10 mb-5 md:flex">
-          <span className="text-[23px] font-bold">Bookshelf</span>
+          <Link to="/bookshelf" className="text-[23px] font-bold">
+            Bookshelf
+          </Link>
         </div>
 
         {/* Main controls */}
@@ -104,7 +104,7 @@ export default function BookShelfComponent() {
 
           {/* Add book (mobile) */}
           <div className="lg:hidden flex justify-end">
-            <Link to="/add-book">
+            <Link to="/create-book">
               <button className="bg-[#5C5E81] text-white px-3 py-1 rounded-[24px] flex items-center">
                 <span className="font-bold text-[16px] tracking-wide"> + new book</span>
               </button>
@@ -113,7 +113,7 @@ export default function BookShelfComponent() {
 
           {/* Add book (desktop) */}
           <div className="hidden lg:flex items-center">
-            <Link to="/add-book">
+            <Link to="/create-book">
               <button className="bg-[#5C5E81] text-white px-4 py-1.5 rounded-[24px] flex items-center">
                 <span className="font-bold text-[20px] tracking-wide">+ new book</span>
               </button>
@@ -127,7 +127,7 @@ export default function BookShelfComponent() {
             <div key={index} className="flex flex-col items-center">
 
               <Link
-                to={`/book-detail/${index}`}
+                to={'/complete-story'}
                 className="relative w-[150px] h-[200px] rounded-[10px] group cursor-pointer block"
               >
                 {/* Shadow */}
@@ -147,7 +147,6 @@ export default function BookShelfComponent() {
               </Link>
 
               {/* Book name */}
-              {/* เปลี่ยนจาก Link เป็น div เพื่อ handle click เปิด modal */}
               <div
                 onClick={() => openRenameModal(index)}
                 className="block mt-4 max-w-[100px] cursor-pointer text-[#9D9191] text-[15px] font-medium text-center select-none"
