@@ -5,6 +5,7 @@ import LoginPage from "./components/LoginComponent";
 import SignupPage from "./pages/SignUp";
 import { EditAccountPage } from "./pages/EditAccountPage";
 import { BookShelfPage } from "./pages/BookShelfPage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +29,8 @@ const router = createBrowserRouter([
     path: "/bookshelf",
     element: <BookShelfPage />,
   },
+
+
 
 ]);
 function App() {
