@@ -1,11 +1,20 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePageComponent() {
-  const [isFlipped, setIsFlipped] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const navigate = useNavigate();
+
+  const handleBookClick = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      navigate("/login");
+    }, 800);
+  };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-[#FFFFFF] via-[#838FAF] to-[#8AA0BD] overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
@@ -41,33 +50,58 @@ export default function HomePageComponent() {
         ))}
       </div>
 
+      {/* Flash overlay for transition effect */}
+      <div 
+        className={`fixed inset-0 bg-white z-50 transition-opacity duration-300 pointer-events-none ${
+          isAnimating ? 'opacity-90' : 'opacity-0'
+        }`}
+        style={{
+          background: isAnimating
+            ? 'radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(131,143,175,0.8) 100%)'
+            : 'transparent'
+        }}
+      />
+
+      {/* Swipe overlay */}
+      <div 
+        className={`fixed inset-0 z-40 pointer-events-none transition-transform duration-700 ease-in-out ${
+          isAnimating ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(131,143,175,0.3) 30%, rgba(255,255,255,0.6) 50%, rgba(131,143,175,0.3) 70%, transparent 100%)',
+          transform: isAnimating ? 'translateX(-100vw)' : 'translateX(100vw)',
+          transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        }}
+      />
+
       {/* Main content container */}
-      <div className="flex items-center justify-center min-h-screen py-8 sm:py-16 px-4 relative z-10">
+      <div className={`flex items-center justify-center min-h-screen py-8 sm:py-16 px-4 relative z-10 transition-all duration-700 ${
+        isAnimating ? 'scale-95 opacity-80' : 'scale-100 opacity-100'
+      }`}>
         <div
-          className={`relative transition-all duration-700 ${isHovered ? "scale-105" : "scale-100"} ${isHovered ? "lg:scale-105" : "lg:scale-100"} ${isHovered ? "md:scale-102" : "md:scale-100"} ${isHovered ? "sm:scale-101" : "sm:scale-100"}`}
+          className={`relative transition-all duration-700 cursor-pointer ${
+            isHovered ? "scale-105" : "scale-100"
+          } ${isAnimating ? 'animate-pulse' : ''}`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onClick={handleBookClick}
         >
-          {/* Book container with 3D perspective */}
+          {/* Book container */}
           <div
-            className={`relative w-[280px] h-[350px] sm:w-[360px] sm:h-[450px] md:w-[440px] md:h-[520px] lg:w-[520px] lg:h-[600px] transform transition-all duration-1000 ${
-              isFlipped ? "rotate-y-180" : "-rotate-1 sm:-rotate-2 lg:-rotate-3"
-            } shadow-xl sm:shadow-2xl hover:shadow-3xl`}
+            className="relative w-[280px] h-[350px] sm:w-[360px] sm:h-[450px] md:w-[440px] md:h-[520px] lg:w-[520px] lg:h-[600px] transform -rotate-1 sm:-rotate-2 lg:-rotate-3 shadow-xl sm:shadow-2xl hover:shadow-3xl"
             style={{
               transformStyle: "preserve-3d",
               filter:
                 "drop-shadow(0 15px 35px rgba(0, 0, 0, 0.4)) sm:drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5))",
             }}
           >
-            {/* Book spine with gradient */}
+            {/* Book spine */}
             <div className="absolute left-0 top-0 h-full w-[60px] sm:w-[80px] lg:w-[105px] bg-gradient-to-b from-slate-700 via-slate-600 to-slate-800 rounded-l-md border-r-2 border-slate-500">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 rounded-l-md"></div>
             </div>
 
             {/* Front cover */}
-            <div
-              className={`absolute left-[50px] sm:left-[70px] lg:left-[90px] top-0 h-full w-[230px] sm:w-[290px] md:w-[370px] lg:w-[430px] bg-gradient-to-br from-white via-gray-50 to-gray-100 rounded-r-md flex flex-col justify-between items-center py-4 sm:py-6 lg:py-8 px-3 sm:px-4 lg:px-6 transition-opacity duration-500 ${isFlipped ? "opacity-0" : "opacity-100"}`}
-            >
+            <div className="absolute left-[50px] sm:left-[70px] lg:left-[90px] top-0 h-full w-[230px] sm:w-[290px] md:w-[370px] lg:w-[430px] bg-gradient-to-br from-white via-gray-50 to-gray-100 rounded-r-md flex flex-col justify-between items-center py-4 sm:py-6 lg:py-8 px-3 sm:px-4 lg:px-6 transition-opacity duration-500">
               <div className="flex-1 flex flex-col justify-center items-center space-y-3 sm:space-y-4 lg:space-y-6">
                 <div className="text-center space-y-1 sm:space-y-2">
                   <h1 className="text-slate-700 font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-wide">
@@ -90,66 +124,29 @@ export default function HomePageComponent() {
                 </div>
               </div>
 
-              {/* Interactive flip button */}
-              <button
-                onClick={() => setIsFlipped(!isFlipped)}
-                className="text-slate-500 hover:text-slate-700 transition-all duration-300 group flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-medium"
-              >
-                <span className="group-hover:translate-x-1 transition-transform duration-300">
-                  click to flip
-                </span>
-                <svg
-                  className="w-3 h-3 sm:w-4 sm:h-4 group-hover:rotate-180 transition-transform duration-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {/* Back cover - shown when flipped */}
-            <div
-              className={`absolute left-[50px] sm:left-[70px] lg:left-[90px] top-0 h-full w-[230px] sm:w-[290px] md:w-[370px] lg:w-[430px] bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-r-md flex flex-col justify-center items-center py-4 sm:py-6 lg:py-8 px-3 sm:px-4 lg:px-6 transition-opacity duration-500 ${isFlipped ? "opacity-100" : "opacity-0"}`}
-            >
-              <div className="text-center space-y-4 sm:space-y-6 lg:space-y-8 text-white">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-light tracking-wide">
-                  Where stories come alive
-                </h3>
-                <div className="space-y-2 sm:space-y-3 lg:space-y-4 text-sm sm:text-base lg:text-lg opacity-90">
-                  <p>Transform your ideas into captivating narratives</p>
-                  <p>Let creativity flow through every keystroke</p>
-                  <p>Your imagination, unlimited</p>
-                </div>
-                <button
-                  onClick={() => setIsFlipped(!isFlipped)}
-                  className="mt-4 sm:mt-6 lg:mt-8 px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-lg text-white transition-all duration-300 hover:scale-105 text-sm sm:text-base"
-                >
-                  Start Writing
-                </button>
-              </div>
+              {/* Button placeholder */}
+              <div className="invisible h-8" />
             </div>
           </div>
+
+          {/* Subtle blur only on click */}
+          <div className={`absolute -inset-4 rounded-lg transition-all duration-300 pointer-events-none ${
+            isAnimating ? 'bg-white/5 backdrop-blur-sm' : 'bg-transparent'
+          }`} />
         </div>
       </div>
 
-      {/* Brand title with enhanced styling */}
+      {/* Brand title */}
       <div className="absolute top-4 sm:top-6 lg:top-8 left-4 sm:left-6 lg:left-8 z-20">
         <h1 className="text-white font-bold text-2xl sm:text-3xl lg:text-4xl tracking-wider">
-          <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#5C5E81] via-[#838FAF] to-[#5C5E81] bg-clip-text text-transparent">
             TypeToTale
           </span>
         </h1>
-        <div className="h-0.5 sm:h-1 w-16 sm:w-20 lg:w-24 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-1 sm:mt-2 animate-pulse"></div>
+        <div className="h-0.5 sm:h-1 w-16 sm:w-20 lg:w-24 bg-gradient-to-r from-[#5C5E81] via-[#838FAF] to-[#5C5E81] rounded-full mt-1 sm:mt-2 animate-pulse"></div>
       </div>
 
-      {/* Decorative corner elements */}
+      {/* Decorative corners */}
       <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-bl from-white/10 to-transparent pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
     </div>

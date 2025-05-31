@@ -59,14 +59,10 @@ export default function SignUpComponent() {
       });
 
       const data = response.data;
-      console.log("Signup response:", data);
       if (!data.status) {
         setSignupError(data.msg || "Signup failed");
-      } else if (data.status) {
-        // Simulate success
-        window.location.href = "/login"; // Redirect to login page after successful signup
       } else {
-        setSignupError("Invalid signup credentials");
+        window.location.href = "/login";
       }
     } catch (error) {
       setSignupError(
@@ -78,49 +74,40 @@ export default function SignUpComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      {/* Brand Logo - Top Left */}
-      <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          TypeToTale
-        </h1>
-      </div>
-
-      {/* Main Container */}
+      {/* Container */}
       <div className="w-full max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[600px] lg:min-h-[700px]">
           <div className="flex flex-col lg:flex-row">
-            {/* Left Side - Brand Section */}
-            <div className="lg:w-1/2 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 relative flex items-center justify-center p-8 lg:p-12 min-h-[200px] lg:min-h-[700px]">
-              {/* Background Pattern */}
+            {/* Left Panel */}
+            <div className="lg:w-1/2 bg-gradient-to-br from-[#5C5E81] to-[#838FAF] relative flex items-center justify-center p-8 lg:p-12 min-h-[200px] lg:min-h-[700px]">
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white rounded-full"></div>
                 <div className="absolute bottom-20 right-16 w-16 h-16 border-2 border-white rounded-lg rotate-45"></div>
                 <div className="absolute top-1/2 left-8 w-12 h-12 border-2 border-white rounded-full"></div>
                 <div className="absolute bottom-32 left-20 w-8 h-8 bg-white rounded-full"></div>
               </div>
-
-              {/* Main Brand Text */}
               <div className="text-center lg:text-left relative z-10">
                 <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 leading-tight">
                   TypeToTale
+                  <br />
                 </h2>
-                <p className="text-blue-100 text-lg md:text-xl lg:text-2xl font-light max-w-md">
+                <p className="text-white/80 text-lg font-light max-w-md">
                   Transform your thoughts into captivating stories
                 </p>
                 <div className="mt-8 flex justify-center lg:justify-start space-x-2">
                   <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-blue-200 rounded-full animate-pulse delay-100"></div>
-                  <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse delay-200"></div>
+                  <div className="w-2 h-2 bg-white/60 rounded-full animate-pulse delay-150"></div>
+                  <div className="w-2 h-2 bg-white/40 rounded-full animate-pulse delay-300"></div>
                 </div>
               </div>
             </div>
 
-            {/* Right Side - Sign Up Form */}
+            {/* Right Panel */}
             <div className="lg:w-1/2 p-6 md:p-8 lg:p-12 flex flex-col justify-center">
-              <div className="max-w-md mx-auto w-full">
+              <form onSubmit={handleSignup} className="max-w-md mx-auto w-full">
                 {/* Header */}
                 <div className="text-center mb-8">
-                  <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+                  <h3 className="text-3xl md:text-4xl font-bold text-[#5C5E81] mb-2">
                     Create Account
                   </h3>
                   <p className="text-gray-600 text-sm md:text-base">
@@ -128,7 +115,7 @@ export default function SignUpComponent() {
                   </p>
                 </div>
 
-                {/* Error Message */}
+                {/* Error Alert */}
                 {signupError && (
                   <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
                     <p className="text-red-700 text-sm font-medium">
@@ -137,10 +124,10 @@ export default function SignUpComponent() {
                   </div>
                 )}
 
-                {/* Form */}
+                {/* Form Fields */}
                 <div className="space-y-6">
-                  {/* Username Field */}
-                  <div className="space-y-1">
+                  {/* Username */}
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Username
                     </label>
@@ -149,21 +136,19 @@ export default function SignUpComponent() {
                       placeholder="Enter your username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className={`w-full px-4 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.username
+                      className={`w-full px-4 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
+                        errors.username
                           ? "border-red-300 bg-red-50"
-                          : "border-gray-200 hover:border-gray-300 focus:border-indigo-500"
-                        }`}
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
                     />
                     {errors.username && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <span className="w-1 h-1 bg-red-500 rounded-full mr-2"></span>
-                        {errors.username}
-                      </p>
+                      <p className="text-red-500 text-xs mt-1">{errors.username}</p>
                     )}
                   </div>
 
-                  {/* Email Field */}
-                  <div className="space-y-1">
+                  {/* Email */}
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Email Address
                     </label>
@@ -172,21 +157,19 @@ export default function SignUpComponent() {
                       placeholder="Enter your email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className={`w-full px-4 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.email
+                      className={`w-full px-4 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
+                        errors.email
                           ? "border-red-300 bg-red-50"
-                          : "border-gray-200 hover:border-gray-300 focus:border-indigo-500"
-                        }`}
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
                     />
                     {errors.email && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <span className="w-1 h-1 bg-red-500 rounded-full mr-2"></span>
-                        {errors.email}
-                      </p>
+                      <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                     )}
                   </div>
 
-                  {/* Password Field */}
-                  <div className="space-y-1">
+                  {/* Password */}
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Password
                     </label>
@@ -196,33 +179,27 @@ export default function SignUpComponent() {
                         placeholder="Create a password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className={`w-full px-4 py-3 pr-12 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.password
+                        className={`w-full px-4 py-3 pr-12 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
+                          errors.password
                             ? "border-red-300 bg-red-50"
-                            : "border-gray-200 hover:border-gray-300 focus:border-indigo-500"
-                          }`}
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                       >
-                        {showPassword ? (
-                          <EyeOff size={20} />
-                        ) : (
-                          <Eye size={20} />
-                        )}
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <span className="w-1 h-1 bg-red-500 rounded-full mr-2"></span>
-                        {errors.password}
-                      </p>
+                      <p className="text-red-500 text-xs mt-1">{errors.password}</p>
                     )}
                   </div>
 
-                  {/* Confirm Password Field */}
-                  <div className="space-y-1">
+                  {/* Confirm Password */}
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Confirm Password
                     </label>
@@ -232,17 +209,16 @@ export default function SignUpComponent() {
                         placeholder="Confirm your password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className={`w-full px-4 py-3 pr-12 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.confirmPassword
+                        className={`w-full px-4 py-3 pr-12 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
+                          errors.confirmPassword
                             ? "border-red-300 bg-red-50"
-                            : "border-gray-200 hover:border-gray-300 focus:border-indigo-500"
-                          }`}
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
                       />
                       <button
                         type="button"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                       >
                         {showConfirmPassword ? (
                           <EyeOff size={20} />
@@ -252,8 +228,7 @@ export default function SignUpComponent() {
                       </button>
                     </div>
                     {errors.confirmPassword && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <span className="w-1 h-1 bg-red-500 rounded-full mr-2"></span>
+                      <p className="text-red-500 text-xs mt-1">
                         {errors.confirmPassword}
                       </p>
                     )}
@@ -261,9 +236,9 @@ export default function SignUpComponent() {
 
                   {/* Submit Button */}
                   <button
-                    onClick={handleSignup}
+                    type="submit"
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold text-sm transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
+                    className="w-full bg-gradient-to-r from-[#5C5E81] to-[#838FAF] hover:from-[#5C5E81] hover:to-[#838FAF] text-white py-3 rounded-xl font-semibold text-sm transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center">
@@ -295,19 +270,19 @@ export default function SignUpComponent() {
                   </button>
                 </div>
 
-                {/* Login Link */}
+                {/* Footer Link */}
                 <div className="text-center mt-8">
                   <p className="text-gray-600 text-sm">
                     Already have an account?{" "}
                     <a
                       href="/login"
-                      className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
+                      className="text-[#5C5E81] hover:text-[#838FAF] font-semibold transition-colors"
                     >
                       Login
                     </a>
                   </p>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
