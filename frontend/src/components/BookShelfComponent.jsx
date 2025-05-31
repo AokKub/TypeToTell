@@ -1,15 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function BookShelfComponent() {
-  const bookNames = [
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
+  const [renameInput, setRenameInput] = useState('');
+  const [selectedBookIndex, setSelectedBookIndex] = useState(null);
+
+  const [bookNames, setBookNames] = useState([
     "Name",
     "Name",
     "Name",
     "Name",
     "Name",
     "Name",
-  ];
+  ]);
+
+  // เปิด modal พร้อมตั้งค่า input
+  function openRenameModal(index) {
+    setSelectedBookIndex(index);
+    setRenameInput(bookNames[index]);
+    setIsRenameModalOpen(true);
+  }
+
+  // ปิด modal
+  function closeRenameModal() {
+    setIsRenameModalOpen(false);
+    setSelectedBookIndex(null);
+    setRenameInput('');
+  }
+
+  // เปลี่ยนชื่อหนังสือ
+  function handleRename() {
+    if (renameInput.trim() === '') return; // ไม่ให้ตั้งชื่อว่าง
+    setBookNames((prev) => {
+      const newBooks = [...prev];
+      newBooks[selectedBookIndex] = renameInput.trim();
+      return newBooks;
+    });
+    closeRenameModal();
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
@@ -33,8 +62,13 @@ export default function BookShelfComponent() {
           TypeToTale
         </div>
 
+        {/* title */}
+        <div className="absolute top-[70px] py-2 left-8 font-medium text-[15px] text-[#8C8DA3] tracking-wide">
+          Start to type to start telling a story together!
+        </div>
+
         {/* Breadcrumb */}
-        <div className="items-center text-lg mt-5 md:mt-14 text-[#5C5E81] ml-10 mb-5 md:flex">
+        <div className="items-center text-lg mt-10 md:mt-18 text-[#5C5E81] ml-10 mb-5 md:flex">
           <span className="text-[23px] font-bold">Bookshelf</span>
         </div>
 
@@ -113,15 +147,57 @@ export default function BookShelfComponent() {
               </Link>
 
               {/* Book name */}
-              <Link to={`/edit-book/${index}`} className="block mt-4 max-w-[100px] cursor-pointer">
-                <p className="text-[#9D9191] text-[15px] font-medium text-center">
-                  {name}
-                </p>
-              </Link>
+              {/* เปลี่ยนจาก Link เป็น div เพื่อ handle click เปิด modal */}
+              <div
+                onClick={() => openRenameModal(index)}
+                className="block mt-4 max-w-[100px] cursor-pointer text-[#9D9191] text-[15px] font-medium text-center select-none"
+                title="Click to rename"
+              >
+                {name}
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Rename Modal (ไม่มี background overlay) */}
+      {isRenameModalOpen && (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+          <div className="bg-white shadow-lg rounded-2xl p-6 w-[400px] border border-gray-300">
+            <h2 className="text-xl font-bold text-[#5C5E81] mb-4 text-center">Rename Book</h2>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="rename"
+                className="flex-grow px-4 py-2 border font-light text-[14px] border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5C5E81]"
+                value={renameInput}
+                onChange={(e) => setRenameInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleRename();
+                  if (e.key === "Escape") closeRenameModal();
+                }}
+                autoFocus
+              />
+              <button
+                className="bg-[#5C5E81] text-[15px] text-white px-4 py-2 rounded-[50px] whitespace-nowrap"
+                onClick={handleRename}
+              >
+                Rename
+              </button>
+            </div>
+
+            <div className="flex justify-center mt-4">
+              <button
+                className="text-[15px] px-4 py-2 text-[#D37070] underline"
+                onClick={closeRenameModal}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
