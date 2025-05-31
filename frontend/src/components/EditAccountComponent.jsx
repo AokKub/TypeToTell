@@ -12,15 +12,15 @@ import {
   Trash2,
   RefreshCw,
 } from "lucide-react";
-import axiosInstance from "../api/axiosInstance"; // Adjust the import path as necessary
-import { Link, useNavigate } from "react-router-dom"; // 🧭 import useNavigate from react-router-dom
+import axiosInstance from "../api/axiosInstance"; 
+import { Link, useNavigate } from "react-router-dom";
 
 export default function UserEditAcc() {
   const [profileImage, setProfileImage] = useState(null);
   const [profileFile, setProfileFile] = useState(null);
   const [originalProfileImage, setOriginalProfileImage] = useState(null);
   const fileInputRef = useRef(null);
-  const navigate = useNavigate(); // 🧭 import useNavigate from react-router-dom
+  const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     username: "",
     email: "",

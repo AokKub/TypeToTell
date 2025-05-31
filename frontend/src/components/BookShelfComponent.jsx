@@ -270,12 +270,12 @@ export default function BookShelfComponent() {
           transition={{ duration: 0.5 }}
         >
           <div
-            className="text-[35px] font-bold text-[#5C5E81] tracking-wide mb-1"
+            className="text-[25px] md:text-[35px] font-bold text-[#5C5E81] tracking-wide mb-1"
             style={{ textShadow: "1px 1px 4px rgba(92, 94, 129, 0.2)" }}
           >
             TypeToTale
           </div>
-          <div className="font-medium text-[15px] text-[#8C8DA3] tracking-wide">
+          <div className="font-medium text-[10px] md:text-[15px] text-[#8C8DA3] tracking-wide">
             Start typing to begin your storytelling journey!
           </div>
         </motion.div>
@@ -288,7 +288,7 @@ export default function BookShelfComponent() {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <div className="flex items-center gap-3 mb-2">
-            <div className="text-[28px] font-bold text-[#5C5E81]">
+            <div className="text-[20px] md:text-[28px] font-bold text-[#5C5E81]">
               Your Bookshelf
             </div>
             <motion.div
@@ -408,13 +408,15 @@ export default function BookShelfComponent() {
                 />
               </svg>
               <span className="text-sm font-medium">Refresh</span>
-              <div className="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-[#5C5E81] text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <div className="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-[#5C5E81] text-white text-xs rounded py-1 px-2
+                opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
                 Refresh books
               </div>
+
             </motion.button>
             <Link to="/create-book">
               <motion.button
-                className="bg-gradient-to-r from-[#5C5E81] to-[#6B7BA5] text-white px-6 py-2.5 rounded-2xl flex items-center gap-2 shadow-lg"
+                className="bg-gradient-to-r from-[#5C5E81] to-[#6B7BA5] text-white px-4 py-2.5 rounded-2xl flex items-center gap-2 shadow-lg"
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0 4px 20px rgba(92, 94, 129, 0.3)",
@@ -433,7 +435,7 @@ export default function BookShelfComponent() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="font-semibold text-[16px] lg:text-[18px] tracking-wide">
+                <span className="font-semibold text-[14px] lg:text-[18px] tracking-wide">
                   New Book
                 </span>
               </motion.button>
@@ -530,7 +532,7 @@ export default function BookShelfComponent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="text-[24px] font-bold text-[#5C5E81] mb-4">
+                <h2 className="text-[18px] md:text-[24px] font-bold text-[#5C5E81] mb-4">
                   Completed Books ({completedBooks.length})
                 </h2>
                 <motion.div
@@ -539,70 +541,66 @@ export default function BookShelfComponent() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  {completedBooks.map((book, index) => (
+               {completedBooks.map((book, index) => (
+                  <motion.div
+                    key={book.id}
+                    className="flex flex-col items-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    {/* group book */}
                     <motion.div
-                      key={book.id}
-                      className="flex flex-col items-center group"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      whileHover={{ scale: 1.05, boxShadow: "0 8px 20px rgba(0,0,0,0.15)" }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative w-[150px] h-[200px] cursor-pointer rounded-[12px]"
                     >
                       <Link
                         to={`/complete-story/${book.id}`}
-                        className="relative w-[150px] h-[200px] rounded-[12px] cursor-pointer block"
+                        className="block w-full h-full rounded-[12px] overflow-hidden"
                       >
-                        <motion.div
-                          className="absolute top-3 left-3 w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 rounded-lg opacity-60 z-0"
-                          whileHover={{ opacity: 0.8 }}
-                          transition={{ duration: 0.3 }}
-                        ></motion.div>
-                        <div className="absolute left-0 top-0 w-[18px] h-full bg-gradient-to-b from-[#494141] to-[#2d2828] rounded-l-lg z-10 shadow-inner"></div>
-                        <motion.div
-                          className="absolute left-[18px] top-0 right-0 h-full bg-gradient-to-br from-[#5C5E81] via-[#6B7BA5] to-[#4a4c6b] rounded-r-lg z-15 shadow-lg"
-                          whileHover={{
-                            scale: 1.05,
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-                          }}
-                          transition={{ duration: 0.3 }}
-                        >
+                        {/* spine */}
+                        <div className="absolute left-0 top-0 w-[18px] h-full bg-gradient-to-b from-[#494141] to-[#2d2828] rounded-l-lg shadow-inner z-10"></div>
+
+                        {/* cover */}
+                        <div className="absolute left-[18px] top-0 right-0 h-full bg-gradient-to-br from-[#5C5E81] via-[#6B7BA5] to-[#4a4c6b] rounded-r-lg shadow-lg z-15 overflow-hidden">
                           <div className="absolute inset-0 bg-white bg-opacity-5 rounded-r-lg"></div>
-                          <motion.div
-                            className="absolute inset-4 flex items-end"
-                            initial={{ opacity: 0.4 }}
-                            whileHover={{ opacity: 0.7 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <div className="text-white text-xs font-bold transform rotate-0 line-clamp-3 text-center w-full">
+                          <div className="absolute inset-4 flex items-end">
+                            <div className="text-white text-xs font-bold line-clamp-3 text-center w-full">
                               {book.theme}
                             </div>
-                          </motion.div>
-                        </motion.div>
-                        <motion.div
-                          className="absolute top-3 right-3 z-20"
-                          whileHover={{ scale: 1.2 }}
-                          transition={{ duration: 0.2 }}
-                        >
+                          </div>
+                        </div>
+
+                        <div className="absolute top-3 left-3 w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 rounded-lg opacity-60 z-0"></div>
+
+                        {/* completed icon */}
+                        <div className="absolute top-3 right-3 z-20">
                           <div
                             className="w-4 h-4 rounded-full shadow-lg border-2 border-white bg-emerald-400"
                             title="Completed"
                           >
                             <div className="w-full h-full rounded-full bg-emerald-300 opacity-60"></div>
                           </div>
-                        </motion.div>
+                        </div>
                       </Link>
-                      <div className="mt-4 text-center max-w-[150px]">
-                        <div className="flex items-center justify-between gap-2">
+                    </motion.div>
+
+                    {/* book name and delete button */}
+                    <div className="mt-4 w-full flex justify-center">
+                        <div className="flex items-center max-w-[150px]">
                           <motion.div
-                            onClick={() =>
-                              openRenameModal(index, book.id, true)
-                            }
-                            className="flex-1 cursor-pointer text-[#5C5E81] text-[15px] font-semibold hover:text-[#4a4c6b] transition-colors duration-300 mb-2 line-clamp-2 px-2 py-1 rounded-lg hover:bg-white hover:bg-opacity-50"
+                            onClick={() => openRenameModal(index, book.id, false)}
+                            className="cursor-pointer text-[#5C5E81] text-[15px] font-semibold hover:text-[#4a4c6b] transition-colors duration-300 line-clamp-2 px-2 py-1 rounded-lg hover:bg-opacity-50 text-center flex-1"
                             title="Click to rename"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
                           >
                             {book.theme}
                           </motion.div>
+
                           <motion.button
                             onClick={() => openDeleteModal(book.id)}
                             className="text-red-500 hover:text-red-600 transition-colors duration-300"
@@ -625,12 +623,14 @@ export default function BookShelfComponent() {
                             </svg>
                           </motion.button>
                         </div>
-                        <div className="text-[12px] text-[#8C8DA3] font-medium">
-                          {formatDate(book.createdAt)}
-                        </div>
                       </div>
-                    </motion.div>
-                  ))}
+
+                    {/* date */}
+                    <div className="text-[12px] text-[#8C8DA3] font-medium">
+                      {formatDate(book.createdAt)}
+                    </div>
+                  </motion.div>
+                ))}
                 </motion.div>
               </motion.div>
             )}
@@ -642,9 +642,10 @@ export default function BookShelfComponent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <h2 className="text-[24px] font-bold text-[#5C5E81] mb-4">
+                <h2 className="text-[18px] md:text-[24px] font-bold text-[#5C5E81] mb-4">
                   In Progress Books ({nonCompletedBooks.length})
                 </h2>
+
                 <motion.div
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8"
                   initial={{ opacity: 0 }}
@@ -654,67 +655,64 @@ export default function BookShelfComponent() {
                   {nonCompletedBooks.map((book, index) => (
                     <motion.div
                       key={book.id}
-                      className="flex flex-col items-center group"
+                      className="flex flex-col items-center"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
-                      <Link
-                        to={`/story/${book.id}`}
-                        className="relative w-[150px] h-[200px] rounded-[12px] cursor-pointer block"
+                      {/* group book */}
+                      <motion.div
+                        whileHover={{ scale: 1.05, boxShadow: "0 8px 20px rgba(0,0,0,0.15)" }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.3 }}
+                        className="relative w-[150px] h-[200px] cursor-pointer rounded-[12px]"
                       >
-                        <motion.div
-                          className="absolute top-3 left-3 w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 rounded-lg opacity-60 z-0"
-                          whileHover={{ opacity: 0.8 }}
-                          transition={{ duration: 0.3 }}
-                        ></motion.div>
-                        <div className="absolute left-0 top-0 w-[18px] h-full bg-gradient-to-b from-[#8B4513] to-[#654321] rounded-l-lg z-10 shadow-inner"></div>
-                        <motion.div
-                          className="absolute left-[18px] top-0 right-0 h-full bg-gradient-to-br from-[#A0A0A0] via-[#B8B8B8] to-[#888888] rounded-r-lg z-15 shadow-lg"
-                          whileHover={{
-                            scale: 1.05,
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-                          }}
-                          transition={{ duration: 0.3 }}
+                        <Link
+                          to={`/story/${book.id}`}
+                          className="block w-full h-full rounded-[12px] overflow-hidden"
                         >
-                          <div className="absolute inset-0 bg-white bg-opacity-5 rounded-r-lg"></div>
-                          <motion.div
-                            className="absolute inset-4 flex items-end"
-                            initial={{ opacity: 0.4 }}
-                            whileHover={{ opacity: 0.7 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <div className="text-white text-xs font-bold transform rotate-0 line-clamp-3 text-center w-full">
-                              {book.theme}
+                          {/* spine */}
+                          <div className="absolute left-0 top-0 w-[18px] h-full bg-gradient-to-b from-[#8B4513] to-[#654321] rounded-l-lg shadow-inner z-10"></div>
+
+                          {/* cover */}
+                          <div className="absolute left-[18px] top-0 right-0 h-full bg-gradient-to-br from-[#A0A0A0] via-[#B8B8B8] to-[#888888] rounded-r-lg shadow-lg z-15 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-white bg-opacity-5 rounded-r-lg"></div>
+                            <div className="absolute inset-4 flex items-end">
+                              <div className="text-white text-xs font-bold line-clamp-3 text-center w-full">
+                                {book.theme}
+                              </div>
                             </div>
-                          </motion.div>
-                        </motion.div>
-                        <motion.div
-                          className="absolute top-3 right-3 z-20"
-                          whileHover={{ scale: 1.2 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <div
-                            className="w-4 h-4 rounded-full shadow-lg border-2 border-white bg-amber-400"
-                            title="In Progress"
-                          >
-                            <div className="w-full h-full rounded-full bg-amber-300 opacity-60"></div>
                           </div>
-                        </motion.div>
-                      </Link>
-                      <div className="mt-4 text-center max-w-[150px]">
-                        <div className="flex items-center justify-between gap-2">
+
+                          {/* overlay */}
+                          <div className="absolute top-3 left-3 w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 rounded-lg opacity-60 z-0"></div>
+
+                          {/* in progress icon */}
+                          <div className="absolute top-3 right-3 z-20">
+                            <div
+                              className="w-4 h-4 rounded-full shadow-lg border-2 border-white bg-amber-400"
+                              title="In Progress"
+                            >
+                              <div className="w-full h-full rounded-full bg-amber-300 opacity-60"></div>
+                            </div>
+                          </div>
+                        </Link>
+                      </motion.div>
+
+                      {/* book name and delete button */}
+                      <div className="mt-4 w-full flex justify-center">
+                        <div className="flex items-center max-w-[150px]">
                           <motion.div
-                            onClick={() =>
-                              openRenameModal(index, book.id, false)
-                            }
-                            className="flex-1 cursor-pointer text-[#5C5E81] text-[15px] font-semibold hover:text-[#4a4c6b] transition-colors duration-300 mb-2 line-clamp-2 px-2 py-1 rounded-lg hover:bg-white hover:bg-opacity-50"
+                            onClick={() => openRenameModal(index, book.id, false)}
+                            className="cursor-pointer text-[#5C5E81] text-[15px] font-semibold hover:text-[#4a4c6b] transition-colors duration-300 line-clamp-2 px-2 py-1 rounded-lg hover:bg-opacity-50 text-center flex-1"
                             title="Click to rename"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
                           >
                             {book.theme}
                           </motion.div>
+
                           <motion.button
                             onClick={() => openDeleteModal(book.id)}
                             className="text-red-500 hover:text-red-600 transition-colors duration-300"
@@ -737,9 +735,12 @@ export default function BookShelfComponent() {
                             </svg>
                           </motion.button>
                         </div>
-                        <div className="text-[12px] text-[#8C8DA3] font-medium">
-                          {formatDate(book.createdAt)}
-                        </div>
+                      </div>
+
+
+                      {/* date */}
+                      <div className="text-[12px] text-[#8C8DA3] font-medium">
+                        {formatDate(book.createdAt)}
                       </div>
                     </motion.div>
                   ))}
