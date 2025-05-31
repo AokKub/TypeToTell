@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import axiosInstance from "../api/axiosInstance";
-import { useNavigate } from "react-router-dom"; // 🧭 import useNavigate
+import { useNavigate } from "react-router-dom";
+
 export default function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -9,7 +10,8 @@ export default function LoginComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); // 🧭 useNavigate hook for navigation
+  const navigate = useNavigate();
+
   const validateForm = () => {
     const newErrors = {};
     if (!email) {
@@ -42,17 +44,12 @@ export default function LoginComponent() {
       });
 
       const data = response.data;
-      console.log("Login response:", data.userLogin?.status);
-      console.log(response.data);
       if (!data.userLogin?.status) {
         setLoginError(data.userLogin.msg || "Login failed");
       } else if (data.userLogin?.status) {
         const { token, user } = data.userLogin;
-        // Note: localStorage not used in demo - would store in real app
         localStorage.setItem("token", token.token);
         localStorage.setItem("user", JSON.stringify(user));
-        console.log("Token:", token.token);
-        console.log("User:", user);
         navigate("/");
       } else {
         setLoginError("Invalid login credentials");
@@ -67,19 +64,14 @@ export default function LoginComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      {/* Brand Logo - Top Left */}
-      <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          TypeToTale
-        </h1>
-      </div>
+
 
       {/* Main Container */}
       <div className="w-full max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[600px] lg:min-h-[700px]">
           <div className="flex flex-col lg:flex-row">
             {/* Left Side - Brand Section */}
-            <div className="lg:w-1/2 bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-800 relative flex items-center justify-center p-8 lg:p-12 min-h-[200px] lg:min-h-[700px]">
+            <div className="lg:w-1/2 bg-gradient-to-br from-[#5C5E81] to-[#838FAF] relative flex items-center justify-center p-8 lg:p-12 min-h-[200px] lg:min-h-[700px]">
               {/* Background Pattern */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-16 right-12 w-24 h-24 border-2 border-white rounded-full"></div>
@@ -92,9 +84,8 @@ export default function LoginComponent() {
               {/* Main Brand Text */}
               <div className="text-center lg:text-left relative z-10">
                 <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 leading-tight">
-                  Welcome
+                  TypeToTale
                   <br />
-                  <span className="text-blue-200">Back</span>
                 </h2>
                 <p className="text-purple-100 text-lg md:text-xl lg:text-2xl font-light max-w-md">
                   Continue your storytelling adventure
@@ -111,11 +102,11 @@ export default function LoginComponent() {
             <div className="lg:w-1/2 p-6 md:p-8 lg:p-12 flex flex-col justify-center">
               <div className="max-w-md mx-auto w-full">
                 {/* Header */}
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4">
+                <div className="text-center mb-10">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#5C5E81] to-[#838FAF] rounded-full mb-4">
                     <Lock className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+                  <h3 className="text-3xl md:text-4xl font-bold text-[#5C5E81] mb-2">
                     Sign In
                   </h3>
                   <p className="text-gray-600 text-sm md:text-base">
@@ -146,10 +137,11 @@ export default function LoginComponent() {
                         placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.email
+                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
+                          errors.email
                             ? "border-red-300 bg-red-50"
-                            : "border-gray-200 hover:border-gray-300 focus:border-indigo-500"
-                          }`}
+                            : "border-gray-200 hover:border-gray-300 focus:border-[#838FAF]"
+                        }`}
                       />
                     </div>
                     {errors.email && (
@@ -172,21 +164,18 @@ export default function LoginComponent() {
                         placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.password
+                        className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#838FAF] focus:border-transparent ${
+                          errors.password
                             ? "border-red-300 bg-red-50"
-                            : "border-gray-200 hover:border-gray-300 focus:border-indigo-500"
-                          }`}
+                            : "border-gray-200 hover:border-gray-300 focus:border-[#838FAF]"
+                        }`}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                       >
-                        {showPassword ? (
-                          <EyeOff size={20} />
-                        ) : (
-                          <Eye size={20} />
-                        )}
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
                     </div>
                     {errors.password && (
@@ -197,21 +186,13 @@ export default function LoginComponent() {
                     )}
                   </div>
 
-                  {/* Forgot Password Link */}
-                  <div className="text-right">
-                    <a
-                      href="/forgot-password"
-                      className="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
-                    >
-                      Forgot your password?
-                    </a>
-                  </div>
+                
 
                   {/* Submit Button */}
                   <button
                     onClick={handleLogin}
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold text-sm transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
+                    className="w-full bg-gradient-to-r from-[#5C5E81] to-[#838FAF] hover:from-[#5C5E81] hover:to-[#838FAF] text-white py-3 rounded-xl font-semibold text-sm transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center">
@@ -249,7 +230,7 @@ export default function LoginComponent() {
                     Don't have an account?{" "}
                     <a
                       href="/signup"
-                      className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
+                      className="text-[#5C5E81] hover:text-[#838FAF] font-semibold transition-colors"
                     >
                       Create Account
                     </a>
