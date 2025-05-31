@@ -1,9 +1,9 @@
-import UserLoginComponent from "../../components/userComponent/userLoginComponent"      
+import LoginComponent from "../components/LoginComponent";
 
-export default function LoginPage(){
+export default function LoginPage() {
   return (
     <div className="flex flex-col">
-        <UserLoginComponent />
+      <LoginComponent />
     </div>
-  )
+  );
 }
