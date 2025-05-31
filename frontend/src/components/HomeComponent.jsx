@@ -9,7 +9,10 @@ export default function HomePageComponent() {
   const handleBookClick = () => {
     setIsAnimating(true);
     setTimeout(() => {
-      navigate("/login");
+      if (!localStorage.getItem("token")) {
+        navigate("/login");
+      }
+      navigate("/bookshelf");
     }, 800);
   };
 
@@ -51,37 +54,40 @@ export default function HomePageComponent() {
       </div>
 
       {/* Flash overlay for transition effect */}
-      <div 
+      <div
         className={`fixed inset-0 bg-white z-50 transition-opacity duration-300 pointer-events-none ${
-          isAnimating ? 'opacity-90' : 'opacity-0'
+          isAnimating ? "opacity-90" : "opacity-0"
         }`}
         style={{
           background: isAnimating
-            ? 'radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(131,143,175,0.8) 100%)'
-            : 'transparent'
+            ? "radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(131,143,175,0.8) 100%)"
+            : "transparent",
         }}
       />
 
       {/* Swipe overlay */}
-      <div 
+      <div
         className={`fixed inset-0 z-40 pointer-events-none transition-transform duration-700 ease-in-out ${
-          isAnimating ? 'translate-x-0' : 'translate-x-full'
+          isAnimating ? "translate-x-0" : "translate-x-full"
         }`}
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(131,143,175,0.3) 30%, rgba(255,255,255,0.6) 50%, rgba(131,143,175,0.3) 70%, transparent 100%)',
-          transform: isAnimating ? 'translateX(-100vw)' : 'translateX(100vw)',
-          transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(131,143,175,0.3) 30%, rgba(255,255,255,0.6) 50%, rgba(131,143,175,0.3) 70%, transparent 100%)",
+          transform: isAnimating ? "translateX(-100vw)" : "translateX(100vw)",
+          transition: "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         }}
       />
 
       {/* Main content container */}
-      <div className={`flex items-center justify-center min-h-screen py-8 sm:py-16 px-4 relative z-10 transition-all duration-700 ${
-        isAnimating ? 'scale-95 opacity-80' : 'scale-100 opacity-100'
-      }`}>
+      <div
+        className={`flex items-center justify-center min-h-screen py-8 sm:py-16 px-4 relative z-10 transition-all duration-700 ${
+          isAnimating ? "scale-95 opacity-80" : "scale-100 opacity-100"
+        }`}
+      >
         <div
           className={`relative transition-all duration-700 cursor-pointer ${
             isHovered ? "scale-105" : "scale-100"
-          } ${isAnimating ? 'animate-pulse' : ''}`}
+          } ${isAnimating ? "animate-pulse" : ""}`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={handleBookClick}
@@ -130,9 +136,11 @@ export default function HomePageComponent() {
           </div>
 
           {/* Subtle blur only on click */}
-          <div className={`absolute -inset-4 rounded-lg transition-all duration-300 pointer-events-none ${
-            isAnimating ? 'bg-white/5 backdrop-blur-sm' : 'bg-transparent'
-          }`} />
+          <div
+            className={`absolute -inset-4 rounded-lg transition-all duration-300 pointer-events-none ${
+              isAnimating ? "bg-white/5 backdrop-blur-sm" : "bg-transparent"
+            }`}
+          />
         </div>
       </div>
 
