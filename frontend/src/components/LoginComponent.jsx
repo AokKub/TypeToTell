@@ -67,8 +67,8 @@ export default function LoginComponent() {
       <div className="flex w-[1200px] h-[600px] rounded-md shadow-lg overflow-hidden">
         {/* Left Panel */}
         <div className="w-[600px] bg-[#5C5E81] relative">
-          <div className="absolute bottom-120 left-6 transform -rotate-270 origin-bottom-left">
-            <p className="text-white text-[80px] font-bold tracking-wider leading-none">
+          <div className="absolute bottom-127 left-6 transform -rotate-270 origin-bottom-left">
+            <p className="text-white text-[77px] font-bold tracking-wider leading-none">
               TypeToTale
             </p>
           </div>
