@@ -506,7 +506,7 @@ export default function BookShelfComponent() {
                 <p className="text-[#8C8DA3] mb-8">
                   Create your first book and start your storytelling journey!
                 </p>
-                <Link to="/add-book">
+                <Link to="/create-book">
                   <motion.button
                     className="bg-gradient-to-r from-[#5C5E81] to-[#6B7BA5] text-white px-8 py-3 rounded-2xl font-semibold shadow-lg"
                     whileHover={{
