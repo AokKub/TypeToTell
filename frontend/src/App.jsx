@@ -1,11 +1,18 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./App.css";
-import HomeComponent from "./components/HomeComponent";
+import { HomePage } from "./pages/HomePage";
+import { EditAccountPage } from "./pages/EditAccountPage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomeComponent />,
+    element: <HomePage />,
   },
+
+  {
+    path: "/edit-account",
+    element: <EditAccountPage />,
+  },
+
 ]);
 function App() {
   return <RouterProvider router={router} />;
