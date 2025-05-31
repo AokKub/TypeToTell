@@ -12,7 +12,18 @@ export default function BookShelfComponent() {
   ];
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col relative">
+      {/* profile */}
+      <Link to="/edit-account" className="absolute top-6 right-6">
+        <div className="w-12 h-12 rounded-full overflow-hidden border-1 border-[#5C5E81] cursor-pointer">
+          <img
+            src="/" 
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </Link>
+
       <div className="pr-5 pb-13 pl-5 md:pt-13 lg:pt-13 pt-20">
         {/* Header */}
         <div
