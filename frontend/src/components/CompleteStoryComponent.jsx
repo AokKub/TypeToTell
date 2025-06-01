@@ -15,7 +15,9 @@ export default function CompleteStoryComponent() {
       try {
         setLoading(true);
         setError(null);
-        const response = await axiosInstance.get(`/secure/complete-story/${id}`);
+        const response = await axiosInstance.get(
+          `/secure/complete-story/${id}`,
+        );
         if (response.data.status) {
           setStoryData(response.data.completedStory.session);
           setProfileImage(JSON.parse(localStorage.getItem("user")).img_url);
@@ -60,7 +62,9 @@ export default function CompleteStoryComponent() {
             transition={{ duration: 0.4 }}
           >
             <div className="w-16 h-16 border-4 border-[#5C5E81] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <div className="text-[#5C5E81] text-xl font-medium">Loading your story...</div>
+            <div className="text-[#5C5E81] text-xl font-medium">
+              Loading your story...
+            </div>
           </motion.div>
         </motion.div>
       ) : error ? (
@@ -77,15 +81,40 @@ export default function CompleteStoryComponent() {
             transition={{ duration: 0.3 }}
           >
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              <svg
+                className="w-8 h-8 text-red-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
               </svg>
             </div>
-            <div className="text-red-600 text-xl font-semibold mb-2">Oops! Something went wrong</div>
+            <div className="text-red-600 text-xl font-semibold mb-2">
+              Oops! Something went wrong
+            </div>
             <div className="text-gray-600 mb-6">{error}</div>
-            <Link to="/bookshelf" className="inline-flex items-center bg-[#5C5E81] text-white px-6 py-3 rounded-full font-medium hover:bg-[#4A4C6D] hover:scale-105 transition-all duration-200 shadow-lg">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <Link
+              to="/bookshelf"
+              className="inline-flex items-center bg-[#5C5E81] text-white px-6 py-3 rounded-full font-medium hover:bg-[#4A4C6D] hover:scale-105 transition-all duration-200 shadow-lg"
+            >
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
               Back to Bookshelf
             </Link>
@@ -101,15 +130,23 @@ export default function CompleteStoryComponent() {
           <div className="absolute top-0 left-0 w-72 h-72 bg-gradient-to-br from-purple-200/30 to-indigo-200/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-blue-200/30 to-purple-200/30 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
 
-          <Link to="/edit-account" className="absolute top-6 right-6 z-10">
-            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform duration-200 bg-gradient-to-br from-[#5C5E81] to-[#7C7EA5]">
-              <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+          <Link to="/edit-account">
+            <div className="absolute top-6 right-6 z-100">
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform duration-200 bg-gradient-to-br from-[#5C5E81] to-[#7C7EA5]">
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </Link>
-
           <div className="flex flex-col flex-grow pr-5 pb-13 pl-5 md:pt-13 lg:pt-13 relative z-10">
             <div className="absolute top-6 left-8">
-              <div className="text-[35px] font-bold text-[#5C5E81] tracking-wide mb-1" style={{ textShadow: "2px 2px 8px rgba(92, 94, 129, 0.15)" }}>
+              <div
+                className="text-[35px] font-bold text-[#5C5E81] tracking-wide mb-1"
+                style={{ textShadow: "2px 2px 8px rgba(92, 94, 129, 0.15)" }}
+              >
                 TypeToTale
               </div>
               <div className="font-medium text-[12px] sm:text-[14px] text-[#8C8DA3] tracking-wide">
@@ -118,9 +155,16 @@ export default function CompleteStoryComponent() {
             </div>
 
             <div className="items-center text-lg mt-30 font-bold md:mt-18 ml-10 md:flex">
-              <Link to="/bookshelf" className="text-[23px] font-bold text-[#8C8DA3] hover:text-[#5C5E81] transition-colors duration-200">Bookshelf</Link>
+              <Link
+                to="/bookshelf"
+                className="text-[23px] font-bold text-[#8C8DA3] hover:text-[#5C5E81] transition-colors duration-200"
+              >
+                Bookshelf
+              </Link>
               <span className="mx-2 text-[#5C5E81]">{">"}</span>
-              <span className="text-[23px] text-[#5C5E81] font-bold">create a story</span>
+              <span className="text-[23px] text-[#5C5E81] font-bold">
+                create a story
+              </span>
             </div>
 
             <div className="flex flex-1 justify-center items-center px-5 mt-5">
@@ -140,22 +184,43 @@ export default function CompleteStoryComponent() {
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3, delay: 0.3 }}
                   >
-                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-10 h-10 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </motion.div>
                   <h2 className="text-3xl sm:text-4xl font-bold mb-3 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent text-center">
                     Story Complete!
                   </h2>
                   <p className="text-base sm:text-lg mb-6 opacity-90 max-w-md mx-auto leading-relaxed text-center">
-                    Congratulations! Your creative journey has reached its perfect ending.
+                    Congratulations! Your creative journey has reached its
+                    perfect ending.
                   </p>
 
                   {storyData?.theme && (
                     <div className="mb-6 text-center">
                       <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                          />
                         </svg>
                         <span className="text-sm font-semibold">Theme: </span>
                         <span className="text-sm ml-1">{storyData.theme}</span>
@@ -174,17 +239,45 @@ export default function CompleteStoryComponent() {
 
                   <div className="flex flex-wrap justify-center gap-4 mb-8">
                     <div className="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 flex items-center">
-                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
-                      <span className="text-sm font-medium">Created: {storyData?.createdAt ? new Date(storyData.createdAt).toLocaleDateString() : "Unknown"}</span>
+                      <span className="text-sm font-medium">
+                        Created:{" "}
+                        {storyData?.createdAt
+                          ? new Date(storyData.createdAt).toLocaleDateString()
+                          : "Unknown"}
+                      </span>
                     </div>
                     {storyData?.updatedAt && (
                       <div className="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 flex items-center">
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
                         </svg>
-                        <span className="text-sm font-medium">Updated: {new Date(storyData.updatedAt).toLocaleDateString()}</span>
+                        <span className="text-sm font-medium">
+                          Updated:{" "}
+                          {new Date(storyData.updatedAt).toLocaleDateString()}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -199,8 +292,18 @@ export default function CompleteStoryComponent() {
                       >
                         <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                         <span className="relative flex items-center">
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
+                          <svg
+                            className="w-5 h-5 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"
+                            />
                           </svg>
                           Go to Bookshelf
                         </span>
